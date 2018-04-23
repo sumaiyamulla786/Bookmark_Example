@@ -60,8 +60,27 @@ class Bookmark(Resource):
             return make_response(jsonify({"Deleted Bookmark name:" : one_marks.name}))
         return abort(404,message="BOOKMARK NOT FOUND!!!")
         
+
+# shows,post,put,remove a single Bookmark item
+class BookmarkAll(Resource):  
+    def get(self):
+        all_marks = btable.query.all()
+        if all_marks:
+            bt = []
+            marks = []
+            for i in all_marks:
+                all_marks_dict ={
+                    'name':i.name,
+                    'url': i.url
+                }
+                marks.append(all_marks_dict)
+            return make_response(json.dumps(marks),201)
+        return abort(404,message="NO BOOKMARKS AVAILABLE!!!")
+
+
 ## Actually setup the Api resource routing here
 api_obj.add_resource(Bookmark,'/bookmarks','/bookmarks/<int:id>') 
+api_obj.add_resource(BookmarkAll,'/bookmarksAll') 
 
 
 
